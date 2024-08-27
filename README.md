@@ -48,7 +48,7 @@ transformers==4.27.4
 
 **Concept Generation**
 
-The first step of our method is to generate a candidate set of concepts describing the specific symptoms of each eye disease. We adopt GPT-4 to autonomously generate attributes for each disease, which are then organized into a list and stored in [`concept_raw.npy`](concepts/concept_raw.npy).
+The first step of our method is to generate a candidate set of concepts describing the specific symptoms of each eye disease. We adopt GPT-4 to autonomously generate attributes for each disease, which are then organized into a list and stored in [`concepts`](concepts).
 
 **OCT Model Pre-training**
 

@@ -17,15 +17,7 @@ class SingleLabelImageFolder(Dataset):
         self.cls_num = cls_num
         self.modality = modality
         if test_file is None:
-            if self.modality == 'fundus':
-                if not if_semi:
-                    file = 'large9cls_balance.txt'
-                    # file = 'cfp_single.txt'
-                else:
-                    file = 'large9cls_balance_label.txt'
-            if self.modality == 'oct':
-                file = 'large9cls.txt'
-                # file = 'oct_single.txt'
+            file = 'large9cls.txt'
             path_file = os.path.join(root, file)
         else:
             path_file = test_file
@@ -87,13 +79,9 @@ class SingleLabelImageFolder(Dataset):
 class MultiModalSingleImageFolder(Dataset):
     def __init__(self, fundus_root, oct_root, cls_num, mode='train', transform=None, target_transform=None, transform_oct=None, if_semi=False):
         super(MultiModalSingleImageFolder, self).__init__()
-        if not if_semi:
-            fundus_file = 'large9cls_balance.txt'
-            # fundus_file = 'cfp_single.txt'
-        else:
-            fundus_file = 'large9cls_balance_label.txt'
+        fundus_file = 'large9cls.txt'
         oct_file = 'large9cls.txt'
-        # oct_file = 'oct_single.txt'
+
         fundus_path_file = os.path.join(fundus_root, fundus_file)
         oct_path_file = os.path.join(oct_root, oct_file)
         
@@ -233,28 +221,3 @@ def build_transform(mode, args):
     t.append(transforms.ToTensor())
     t.append(transforms.Normalize(mean, std))
     return transforms.Compose(t)
-
-
-if __name__ == '__main__':
-#     args =  get_args_parser()
-#     args = args.parse_args()
-    
-#     dataset_train = build_dataset(is_train='train', args=args)
-#     dataset_val = build_dataset(is_train='dev', args=args)
-#     dataset_test = build_dataset(is_train='test', args=args)
-    
-#     weights = dataset_train.label_weights_for_balance()
-#     sampler_train = torch.utils.data.sampler.WeightedRandomSampler(
-#         weights, num_samples=20000, replacement=True)
-    
-#     data_loader_train = torch.utils.data.DataLoader(
-#     dataset_train, sampler=sampler_train,
-#     batch_size=args.batch_size,
-#     num_workers=args.num_workers,
-#     pin_memory=args.pin_mem,
-#     drop_last=True,
-# )
-
-    path = '/home/lwangdk/Multi-Modal-OCT/dataset/assemble/train/ImageData/cfp-clahe-224x224/1ffa9353-8d87-11e8-9daf-6045cb817f5b..png'
-    img_name = os.path.split(path)[-1][:-4]
-    print(img_name)

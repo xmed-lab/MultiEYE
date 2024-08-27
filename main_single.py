@@ -7,28 +7,27 @@ import datetime
 import torch
 import numpy as np
 import wandb
-from flair import FLAIRModel
 
 # fix the seed for reproducibility
-seed = 42
+seed = 0
 torch.manual_seed(seed)
 np.random.seed(seed)
 random.seed(seed)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(seed)
 
-from data.dataset import build_dataset_single, build_dataset_multimodal_single
-from model.flair_distill import FLAIRMultiLayer
-from process.finetune import train_one_epoch, evaluate
-from utils.eval import save_model, load_model
+from data.dataset import build_dataset_single
+from model.flair_single import FLAIRConceptClassifier
+from process.finetune_single import train_one_epoch, evaluate
+from utils.eval import save_model
 
 
 def get_args_parser():
     parser = argparse.ArgumentParser('Multi Eye CLIP', add_help=False)
-    parser.add_argument('--modality', default='fundus', type=str, help='modality for training backbone model')
-    parser.add_argument('--device_id', default='8', type=str, help='select device id')
+    parser.add_argument('--modality', default='oct', type=str, help='modality for training backbone model')
+    parser.add_argument('--device_id', default='2', type=str, help='select device id')
     parser.add_argument('--device', default='cuda', type=str, help='device: cuda or cpu')
-    
+
     parser.add_argument('--seed', default=0, type=int)
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--min_lr', type=float, default=1e-6, metavar='LR',
@@ -36,15 +35,9 @@ def get_args_parser():
     parser.add_argument('--warmup_epochs', type=int, default=5, metavar='N',
                     help='epochs to warmup LR')
     parser.add_argument('--weight_decay', type=float, default=0.001, help='weight decay')
-    parser.add_argument('--alpha_distill', type=float, default=6e-1)
-    parser.add_argument('--beta_distill', type=float, default=5e-2)
-    parser.add_argument('--temperature', type=float, default=10)
     
-    parser.add_argument('--data_path', default='multieye_data/assemble', type=str,help='dataset path')
-    parser.add_argument('--data_path_oct', default='multieye_data/assemble_oct', type=str,help='dataset path')
+    parser.add_argument('--data_path', default='multieye_data/assemble_oct', type=str,help='dataset path')
     parser.add_argument('--concept_path', default='concepts', type=str, help='concept path')
-    parser.add_argument('--checkpoint_path', default='checkpoint/oct_checkpoint', help='oct checkpoint')
-    # parser.add_argument('--checkpoint_path', default='checkpoints/flair-finetune_gpt4cot_select-similarity-concept_oct_single-9cls_256_b64', help='oct checkpoint')
     
     # Augmentation parameters
     parser.add_argument('--input_size', default=512, type=int,
@@ -73,22 +66,19 @@ def get_args_parser():
     parser.add_argument('--print_freq', default=100, type=int, help='batch size')
 
     parser.add_argument('--eval', action='store_true', default=False, help='Perform evaluation only')
-    parser.add_argument('--output_dir', default='./checkpoints/fundus_checkpoint', help='path where to save, empty for no saving')
-    
+    parser.add_argument('--output_dir', default='checkpoint/oct_checkpoint', help='path where to save, empty for no saving')
     return parser
 
 def main(args):
     print('job dir: {}'.format(os.path.dirname(os.path.realpath(__file__))))
     print("{}".format(args).replace(', ', ',\n'))
 
-    # os.environ['CUDA_VISIBLE_DEVICES'] = args.device_id
     device = torch.device(args.device, int(args.device_id))
 
     torch.backends.cudnn.benchmark = True
     
-    train_dataset = build_dataset_multimodal_single('train', args=args)
+    train_dataset = build_dataset_single('train', args=args, mod=args.modality)
     dev_dataset = build_dataset_single('dev', args=args, mod=args.modality)
-    # dev_dataset = build_dataset_multimodal_single('dev', args=args)
     test_dataset = build_dataset_single('test', args=args, mod=args.modality)
 
     weights = train_dataset.label_weights_for_balance()
@@ -116,37 +106,22 @@ def main(args):
         drop_last=False)
     
     concept_feat_path = os.path.join(args.concept_path, 'concepts_raw.npy')
-    model = FLAIRMultiLayer(args, device, concept_feat_path)
-
+    model = FLAIRConceptClassifier(args, device, concept_feat_path)
+    
     for p in model.flair_model.parameters():
         p.requires_grad = False
     for p in model.flair_model.vision_model.parameters():
         p.requires_grad = True
     model.concept_classifier.requires_grad = True
-    model.project_4.requires_grad = True
     model = model.to(device)
     n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print('model parameters = %s' % str(n_parameters))
     
-    oct_model = FLAIRMultiLayer(args, device, concept_feat_path, modality='oct')
-    oct_state_dict = load_model(args=args, if_best=True, device=device, checkpoint=args.checkpoint_path)
-    oct_model.load_state_dict(oct_state_dict, strict=False)
-    oct_model.to(device)
-    oct_model.eval()
-    
     criterion = torch.nn.CrossEntropyLoss()
     print("criterion = %s" % str(criterion))
-    
+
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     print("optimizer = %s" % str(optimizer))
-
-    params_to_update = []
-    for name, param in oct_model.named_parameters():
-        if 'project' in name:
-            params_to_update.append(param)
-            param.requires_grad = True
-    
-    oct_optimizer = torch.optim.AdamW(params_to_update, lr=args.lr, weight_decay=args.weight_decay)
     
     if args.eval:
         test_stats, test_metric = evaluate(args, data_loader_test, model, device, num_class=args.n_classes)
@@ -159,7 +134,7 @@ def main(args):
         train_stats = train_one_epoch(
             model, criterion, data_loader_train,
             optimizer, device, epoch,
-            args, oct_model, oct_optimizer)
+            args=args)
 
         val_stats, val_metric = evaluate(args, data_loader_val, model, device, num_class=args.n_classes)
         if max_metric < val_metric:
@@ -167,7 +142,7 @@ def main(args):
             
             if args.output_dir:
                 save_model(args=args, model=model, optimizer=optimizer, epoch=epoch, if_best=True)
-            print('------ best model ------')  # metric: f1_pr
+            print('------ best model ------')
             if args.modality == 'fundus':
                 test_stats, test_metric = evaluate(args, data_loader_test, model, device, num_class=args.n_classes)
             
@@ -197,7 +172,7 @@ if __name__ == '__main__':
     wandb.init(
         # set the wandb project where this run will be logged
         project="multieye",
-        name='oct-coda',
+        name="oct pre-train model",
         # track hyperparameters and run metadata
         config={
             "modality": args.modality,
@@ -206,8 +181,7 @@ if __name__ == '__main__':
             "num_classes": args.n_classes,
             "num_samples": args.num_samples,
             "batch_size": args.batch_size,
-            "num_epochs": args.epochs,
-            "alpha_distill": args.alpha_distill
+            "num_epochs": args.epochs
         }
     )
     

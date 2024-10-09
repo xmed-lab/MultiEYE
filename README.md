@@ -12,7 +12,7 @@ To benchmark this setting, we present **the first large multi-modal multi-class 
 
 ### Dataset
 
-We create a multi-modal multi-disease classification dataset, MultiEYE, by assembling 12 public fundus datasets and 4 OCT datasets with our private data collected from different hospitals. Our dataset is released at [].
+We create a multi-modal multi-disease classification dataset, MultiEYE, by assembling 12 public fundus datasets and 4 OCT datasets with our private data collected from different hospitals. Our dataset will be made available.
 
 ### Pre-processing
 

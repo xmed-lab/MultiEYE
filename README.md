@@ -12,7 +12,7 @@ To benchmark this setting, we present **the first large multi-modal multi-class 
 
 ### Dataset
 
-We create a multi-modal multi-disease classification dataset, MultiEYE, by assembling 12 public fundus datasets and 4 OCT datasets with our private data collected from different hospitals. Our dataset will be made available.
+We create a multi-modal multi-disease classification dataset, MultiEYE, by assembling 12 public fundus datasets and 4 OCT datasets with our private data collected from different hospitals. Our dataset is available at [link](https://hkustconnect-my.sharepoint.com/:u:/g/personal/lwangdk_connect_ust_hk/EVM6vA5MHnxJrSocPoDqNEsBSaKhecYRJzSGbxGi70nNpw?e=0OLHyb).
 
 ### Pre-processing
 
@@ -66,7 +66,7 @@ python main_single.py \
 --device_id [Select GPU ID]
 ```
 
-We provide the weights of the pre-trained OCT model at [oct_checkpoint](https://hkustconnect-my.sharepoint.com/:f:/g/personal/lwangdk_connect_ust_hk/Eoe0ba8DVtlAsVFohquw2nEB198xIETqtqwkqnci46Yv7g?e=8UgBZI). After downloading, please place the model in the `checkpoint/oct_checkpoint` directory.
+We provide the weights of the pre-trained OCT model at [oct_checkpoint](https://hkustconnect-my.sharepoint.com/:f:/g/personal/lwangdk_connect_ust_hk/EkD8da4rUZNAjw1Aa7XohkYBgTOEpJ_raBPnFHmbF3jYYA?e=ZCAdmL). After downloading, please place the model in the `checkpoint/oct_checkpoint` directory.
 
 **OCT-Assisted Distillation**
 
@@ -89,7 +89,7 @@ python main.py \
 --device_id [Select GPU ID]
 ```
 
-We provide the weights of our trained model at [fundus_checkpoint](https://hkustconnect-my.sharepoint.com/:f:/g/personal/lwangdk_connect_ust_hk/Eoe0ba8DVtlAsVFohquw2nEB198xIETqtqwkqnci46Yv7g?e=8UgBZI).
+We provide the weights of our trained model at [fundus_checkpoint](https://hkustconnect-my.sharepoint.com/:f:/g/personal/lwangdk_connect_ust_hk/EhanS4CWLDxEuQ6YVNgn85gBtgBsIsPj6uE5JOGpqrsBMA?e=CV7uA1).
 
 ### 3. Evaluation
 

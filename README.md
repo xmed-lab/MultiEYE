@@ -100,3 +100,10 @@ We provide the weights of our trained model at [fundus_checkpoint](https://hkust
 ### 3. Evaluation
 
 Run and evaluate the enhanced fundus model in [`test.ipynb`](test.ipynb).
+
+## Citation
+
+If this code is useful for your research, please citing:
+
+```
+```

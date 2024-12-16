@@ -106,4 +106,10 @@ Run and evaluate the enhanced fundus model in [`test.ipynb`](test.ipynb).
 If this code is useful for your research, please citing:
 
 ```
+@article{wang2024multieye,
+  title={MultiEYE: Dataset and Benchmark for OCT-Enhanced Retinal Disease Recognition from Fundus Images},
+  author={Wang, Lehan and Qi, Chongchong and Ou, Chubin and An, Lin and Jin, Mei and Kong, Xiangbin and Li, Xiaomeng},
+  journal={arXiv preprint arXiv:2412.09402},
+  year={2024}
+}
 ```

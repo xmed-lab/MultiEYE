@@ -10,6 +10,7 @@ import os
 from .dictionary import definitions
 from . import constants
 from .misc import wget_gdrive_secure
+from .myresnet import resnet50
 
 from torch.cuda.amp import autocast
 from tqdm import tqdm
@@ -346,7 +347,8 @@ class VisionModel(torch.nn.Module):
             else:
                 weights = 'IMAGENET1K_V1' if pretrained else None
             print("Pretrained weights: " + str(weights))
-            self.model = torchvision.models.resnet50(weights=weights)
+            # self.model = torchvision.models.resnet50(weights=weights)
+            self.model = resnet50(weights=weights)
             # Set number of extracted features
             self.vision_dim = 2048
             # Replace classifier by Identity layer

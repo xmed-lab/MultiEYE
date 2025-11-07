@@ -2,7 +2,7 @@
 
 <a href="https://arxiv.org/abs/2412.09402"><img src="https://img.shields.io/badge/Paper-arXiv-green.svg?style=flat-square"></a>
 <a href="https://multi-eye.github.io/"><img src="https://img.shields.io/badge/Project-Website-orange.svg?style=flat-square"></a>
-<a href="https://hkustconnect-my.sharepoint.com/:u:/g/personal/lwangdk_connect_ust_hk/EVM6vA5MHnxJrSocPoDqNEsBSaKhecYRJzSGbxGi70nNpw?e=0OLHyb"><img src="https://img.shields.io/badge/Dataset-MultiEYE-blue.svg?style=flat-square"></a>
+<a href="https://huggingface.co/datasets/Luxuriant16/MultiEYE"><img src="https://img.shields.io/badge/Dataset-MultiEYE-blue.svg?style=flat-square"></a>
 <a href="https://hkustconnect-my.sharepoint.com/:f:/g/personal/lwangdk_connect_ust_hk/EhanS4CWLDxEuQ6YVNgn85gBtgBsIsPj6uE5JOGpqrsBMA?e=CV7uA1"><img src="https://img.shields.io/badge/Model-Checkpoint-red.svg?style=flat-square"></a>
 
 

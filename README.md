@@ -3,7 +3,7 @@
 <a href="https://arxiv.org/abs/2412.09402"><img src="https://img.shields.io/badge/Paper-arXiv-green.svg?style=flat-square"></a>
 <a href="https://multi-eye.github.io/"><img src="https://img.shields.io/badge/Project-Website-orange.svg?style=flat-square"></a>
 <a href="https://huggingface.co/datasets/Luxuriant16/MultiEYE"><img src="https://img.shields.io/badge/Dataset-MultiEYE-blue.svg?style=flat-square"></a>
-<a href="https://hkustconnect-my.sharepoint.com/:f:/g/personal/lwangdk_connect_ust_hk/EhanS4CWLDxEuQ6YVNgn85gBtgBsIsPj6uE5JOGpqrsBMA?e=CV7uA1"><img src="https://img.shields.io/badge/Model-Checkpoint-red.svg?style=flat-square"></a>
+<a href="https://hkustconnect-my.sharepoint.com/:f:/g/personal/lwangdk_connect_ust_hk/IgBDQ8N_J52lSbTZfzsO9YmIAcMPXHisQIXwQCyKVUOs5f4?e=oNAwE3"><img src="https://img.shields.io/badge/Model-Checkpoint-red.svg?style=flat-square"></a>
 
 
 This repo is the official implementation of [MultiEYE: Dataset and Benchmark for OCT-Enhanced Retinal Disease Recognition from Fundus Images](https://arxiv.org/abs/2412.09402).
@@ -18,7 +18,7 @@ To benchmark this setting, we present **the first large multi-modal multi-class 
 
 ### Dataset
 
-We create a multi-modal multi-disease classification dataset, MultiEYE, by assembling 12 public fundus datasets and 4 OCT datasets with our private data collected from different hospitals. Our dataset is available at [link](https://hkustconnect-my.sharepoint.com/:u:/g/personal/lwangdk_connect_ust_hk/EVM6vA5MHnxJrSocPoDqNEsBSaKhecYRJzSGbxGi70nNpw?e=0OLHyb).
+We create a multi-modal multi-disease classification dataset, MultiEYE, by assembling 12 public fundus datasets and 4 OCT datasets with our private data collected from different hospitals. Our dataset is available at [link](https://huggingface.co/datasets/Luxuriant16/MultiEYE).
 
 ### Pre-processing
 
